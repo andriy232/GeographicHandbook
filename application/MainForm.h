@@ -34,7 +34,7 @@ namespace DB {
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::DataGridView^  dataGridView1;
+
 	private: System::Windows::Forms::Label^  label1;
 	private: System::Windows::Forms::Label^  label2;
 	private: System::Windows::Forms::ComboBox^  cmbBoxSelectCountry;
@@ -44,20 +44,13 @@ namespace DB {
 	private: System::Windows::Forms::Label^  label3;
 	private: System::Windows::Forms::Button^  button6;
 	private: System::Windows::Forms::Button^  button5;
-	private: System::Windows::Forms::DataGridView^  dataGridView2;
 	private: System::Windows::Forms::Label^  label5;
 	private: System::Windows::Forms::Label^  lblCountryName;
 	private: System::Windows::Forms::TextBox^  txtBoxMainInfo;
 	private: System::Windows::Forms::PictureBox^  pictCountryFlag;
-
-
-
-
 	private: System::Windows::Forms::TextBox^  txtBoxFullInfo;
-
-
-
 	private: System::ComponentModel::IContainer^  components;
+
 	protected:
 
 	private:
@@ -74,7 +67,6 @@ namespace DB {
 		void InitializeComponent(void)
 		{
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MainForm::typeid));
-			this->dataGridView1 = (gcnew System::Windows::Forms::DataGridView());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->cmbBoxSelectCountry = (gcnew System::Windows::Forms::ComboBox());
@@ -84,26 +76,13 @@ namespace DB {
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->button5 = (gcnew System::Windows::Forms::Button());
 			this->button6 = (gcnew System::Windows::Forms::Button());
-			this->dataGridView2 = (gcnew System::Windows::Forms::DataGridView());
 			this->label5 = (gcnew System::Windows::Forms::Label());
 			this->lblCountryName = (gcnew System::Windows::Forms::Label());
 			this->txtBoxMainInfo = (gcnew System::Windows::Forms::TextBox());
 			this->pictCountryFlag = (gcnew System::Windows::Forms::PictureBox());
 			this->txtBoxFullInfo = (gcnew System::Windows::Forms::TextBox());
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictCountryFlag))->BeginInit();
 			this->SuspendLayout();
-			// 
-			// dataGridView1
-			// 
-			this->dataGridView1->BackgroundColor = System::Drawing::SystemColors::Control;
-			this->dataGridView1->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			this->dataGridView1->GridColor = System::Drawing::SystemColors::Control;
-			this->dataGridView1->Location = System::Drawing::Point(0, 97);
-			this->dataGridView1->Name = L"dataGridView1";
-			this->dataGridView1->Size = System::Drawing::Size(727, 101);
-			this->dataGridView1->TabIndex = 0;
 			// 
 			// label1
 			// 
@@ -134,6 +113,7 @@ namespace DB {
 			this->cmbBoxSelectCountry->Name = L"cmbBoxSelectCountry";
 			this->cmbBoxSelectCountry->Size = System::Drawing::Size(100, 21);
 			this->cmbBoxSelectCountry->TabIndex = 6;
+			this->cmbBoxSelectCountry->SelectedIndexChanged += gcnew System::EventHandler(this, &MainForm::cmbBoxSelectCountry_SelectedIndexChanged);
 			// 
 			// txtBoxSearchCountry
 			// 
@@ -222,16 +202,6 @@ namespace DB {
 			this->button6->UseVisualStyleBackColor = false;
 			this->button6->Click += gcnew System::EventHandler(this, &MainForm::button6_Click);
 			// 
-			// dataGridView2
-			// 
-			this->dataGridView2->BackgroundColor = System::Drawing::SystemColors::Control;
-			this->dataGridView2->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			this->dataGridView2->GridColor = System::Drawing::SystemColors::Control;
-			this->dataGridView2->Location = System::Drawing::Point(0, 97);
-			this->dataGridView2->Name = L"dataGridView2";
-			this->dataGridView2->Size = System::Drawing::Size(727, 101);
-			this->dataGridView2->TabIndex = 20;
-			// 
 			// label5
 			// 
 			this->label5->AutoSize = true;
@@ -259,9 +229,9 @@ namespace DB {
 			// 
 			// pictCountryFlag
 			// 
-			this->pictCountryFlag->Location = System::Drawing::Point(348, 217);
+			this->pictCountryFlag->Location = System::Drawing::Point(325, 117);
 			this->pictCountryFlag->Name = L"pictCountryFlag";
-			this->pictCountryFlag->Size = System::Drawing::Size(161, 101);
+			this->pictCountryFlag->Size = System::Drawing::Size(317, 185);
 			this->pictCountryFlag->TabIndex = 24;
 			this->pictCountryFlag->TabStop = false;
 			// 
@@ -283,7 +253,6 @@ namespace DB {
 			this->Controls->Add(this->txtBoxMainInfo);
 			this->Controls->Add(this->lblCountryName);
 			this->Controls->Add(this->label5);
-			this->Controls->Add(this->dataGridView2);
 			this->Controls->Add(this->button6);
 			this->Controls->Add(this->button5);
 			this->Controls->Add(this->label3);
@@ -293,12 +262,9 @@ namespace DB {
 			this->Controls->Add(this->cmbBoxSelectCountry);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->label1);
-			this->Controls->Add(this->dataGridView1);
 			this->Name = L"MainForm";
 			this->Text = L"База даних";
 			this->Load += gcnew System::EventHandler(this, &MainForm::MainForm_Load);
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView2))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictCountryFlag))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
@@ -306,58 +272,52 @@ namespace DB {
 		}
 #pragma endregion
 
+		//глобальні змінні для операцій з бд
 		DataSet ^ dataSet;
 		OleDb::OleDbDataAdapter ^ oleDataAdapter;
 		OleDb::OleDbConnection^ oleConnection;
 		OleDb::OleDbCommand ^ oleCommand;
 
+		//глобальні змінні
 		int sel=0;
+		int linesCount=0;
+
 	private: System::
 		Void MainForm_Load(System::Object^ sender, System::EventArgs^ e)
 	{
-		dataGridView2->Visible = false;
+		//запуск форми
 
-		cmbBoxSelectCountry->Items->Clear();
-
-		cmbBoxSelectCountry->Items->Add((Object^)"Номер");
-		cmbBoxSelectCountry->Items->Add((Object^)"Прізвище");
-		cmbBoxSelectCountry->Items->Add((Object^)"Ім'я");
-		cmbBoxSelectCountry->Items->Add((Object^)"По-батькові");
-		cmbBoxSelectCountry->Items->Add((Object^)"Телефон");
-		cmbBoxSelectCountry->Items->Add((Object^)"Адреса");
-
-		cmbBoxSelectCountry->SelectedIndex = 0;
-
-
+		//створюємо датасет, конекшн, і команду
 		dataSet = gcnew DataSet();
-
 		oleConnection = gcnew OleDb::
 			OleDbConnection( 
 			"Data Source=\"database.mdb\"; User ID=Admin;Provider=\"Microsoft.Jet.OLEDB.4.0\";");
-
 		oleCommand = gcnew OleDb::OleDbCommand();
 
+		//під'єднуємося
 		if (oleConnection->State == ConnectionState::Closed) 
 			oleConnection->Open();
 
+		//отримуємо дані
 		oleDataAdapter = gcnew OleDb::OleDbDataAdapter("Select * From [table]", oleConnection);
 
+		//заносимо в кеш
 		oleDataAdapter->Fill(dataSet, "[table]");
+		
+		//отримуємо кількість заповнених рядків
+		linesCount = (dataSet->Tables[0]->Rows->Count) - 1;
+		
+		cmbBoxSelectCountry->Items->Clear();
 
-		String ^ СтрокаXML = dataSet->GetXml();
-
-		txtBoxFullInfo->Text = dataSet->GetXml();
-		//pictCountryFlag->InitialImage
-
-		//dataGridView1->DataSource = dataSet;
-
-		//dataGridView1->DataMember = "[table]";
-
+		for(int i=0;i<linesCount;i++)
+		{
+			//заповнюємо комбобокс
+			String^ country = Convert::ToString(dataSet->Tables[0]->Rows[i]->ItemArray[1]);
+			cmbBoxSelectCountry->Items->Add((Object^)country);
+		}
+		
+		//від'єднуємося від бази
 		oleConnection->Close();
-
-		//dataGridView1->Rows[sel]->Selected = true;
-
-		label5->Text = Convert::ToString(sel + 1);
 	}
 	private: System::Void button2_Click(System::Object^ sender,
 		System::EventArgs^ e)
@@ -549,45 +509,49 @@ private: System::Void button1_Click(System::Object^  sender, System::EventArgs^ 
 private: System::Void button2_Click_1(System::Object^  sender, System::EventArgs^  e) 
 {
 	label5->Text = Convert::ToString(sel+1);
-
+	/*
 	if (sel != 0)
 	{
 		sel--;
 		dataGridView1->ClearSelection();
 		dataGridView1->Rows[sel]->Selected = true;
 	}
-
+	*/
 	label5->Text = Convert::ToString(sel+1);
 }
 private: System::Void button3_Click(System::Object^  sender, System::EventArgs^  e) 
 {
 	label5->Text = Convert::ToString(sel+1);
-
+	/*
 	if (sel != dataGridView1->RowCount-1)
 	{
 		sel++;
 		dataGridView1->ClearSelection();
 		dataGridView1->Rows[sel]->Selected = true;
 	}
-	
+	*/
 	label5->Text = Convert::ToString(sel+1);
 
 }
 private: System::Void button6_Click(System::Object^  sender, System::EventArgs^  e) 
 {
+	/*
 	label5->Text = Convert::ToString(sel+1);
 	dataGridView1->ClearSelection();
 	sel = dataGridView1->RowCount-1;
 	dataGridView1->Rows[sel]->Selected = true;
 	label5->Text = Convert::ToString(sel+1);
+	*/
 }
 private: System::Void button5_Click(System::Object^  sender, System::EventArgs^  e) 
 {
+/*
 	label5->Text = Convert::ToString(sel+1);
 	dataGridView1->ClearSelection();
 	sel = 0;
 	dataGridView1->Rows[sel]->Selected = true;
 	label5->Text = Convert::ToString(sel+1);
+	*/
 }
 private: System::Void button7_Click(System::Object^  sender, System::EventArgs^  e) 
 {
@@ -654,6 +618,41 @@ private: System::Void button7_Click(System::Object^  sender, System::EventArgs^ 
 	oleConnection->Close();
 
 	MainForm_Load(sender, e);
+}
+private: System::Void cmbBoxSelectCountry_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
+	//вибір країни в комбобокс
+
+	//створюємо датасет, конекшн, і команду
+	dataSet = gcnew DataSet();
+	oleConnection = gcnew OleDb::
+		OleDbConnection(
+			"Data Source=\"database.mdb\"; User ID=Admin;Provider=\"Microsoft.Jet.OLEDB.4.0\";");
+	oleCommand = gcnew OleDb::OleDbCommand();
+
+	//під'єднуємося
+	if (oleConnection->State == ConnectionState::Closed)
+		oleConnection->Open();
+
+	//отримуємо дані
+	oleDataAdapter = gcnew OleDb::OleDbDataAdapter("Select * From [table]", oleConnection);
+
+	//заносимо в кеш
+	oleDataAdapter->Fill(dataSet, "[table]");
+
+	//отримуємо індекс вибраного елементу
+	int selCountry = cmbBoxSelectCountry->SelectedIndex;
+
+	//заповнюємо поля форми
+	txtBoxMainInfo->Text = Convert::ToString(dataSet->Tables[0]->Rows[selCountry]->ItemArray[2]);
+	txtBoxFullInfo->Text = Convert::ToString(dataSet->Tables[0]->Rows[selCountry]->ItemArray[3]);
+
+	//отримуємо малюнок і запихаємо в picturebox
+	String^ imgLocation = Convert::ToString(dataSet->Tables[0]->Rows[selCountry]->ItemArray[6]);
+	imgLocation = imgLocation->Remove(imgLocation->IndexOf("#"));
+	pictCountryFlag->ImageLocation = imgLocation;
+	
+	//від'єднуємося від бази
+	oleConnection->Close();
 }
 };
 }

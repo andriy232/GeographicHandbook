@@ -1,7 +1,12 @@
 #include "AboutForm.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+
 
 #pragma once
 namespace DB {
+	using namespace std;
 
 	using namespace System;
 	using namespace System::ComponentModel;
@@ -38,18 +43,12 @@ namespace DB {
 
 	private: System::Windows::Forms::Label^  label1;
 	private: System::Windows::Forms::Label^  label2;
-
 	private: System::Windows::Forms::TextBox^  txtBoxSearchCountry;
 	private: System::Windows::Forms::Button^  btnPrev;
 	private: System::Windows::Forms::Button^  btnNext;
-
-
 	private: System::Windows::Forms::Label^  lblNum;
 	private: System::Windows::Forms::Button^  btnLast;
-
-
 	private: System::Windows::Forms::Button^  btnFirst;
-
 	private: System::Windows::Forms::Label^  label5;
 	private: System::Windows::Forms::Label^  lblCountryName;
 	private: System::Windows::Forms::TextBox^  txtBoxMainInfo;
@@ -58,10 +57,8 @@ namespace DB {
 	private: System::Windows::Forms::ListBox^  lstBoxSelectCountry;
 	private: System::Windows::Forms::Label^  label4;
 	private: System::Windows::Forms::Label^  label6;
-
 	private: System::Drawing::Printing::PrintDocument^  printDocument1;
 	private: System::Windows::Forms::PrintPreviewDialog^  printPreviewDialog1;
-
 	private: System::Windows::Forms::ToolTip^  toolTip1;
 	private: System::Windows::Forms::MenuStrip^  menuStrip1;
 	private: System::Windows::Forms::ToolStripMenuItem^  ôàéëToolStripMenuItem;
@@ -74,7 +71,8 @@ namespace DB {
 	private: System::Windows::Forms::ToolStripMenuItem^  îñòàííÿÊðà¿íàToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  ïðîÏðîãðàìóToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  ïðîÏðîãðàìóToolStripMenuItem1;
-
+	private: System::Windows::Forms::ToolStripMenuItem^  çáåðåãòèToolStripMenuItem;
+	private: System::Windows::Forms::SaveFileDialog^  saveFileDialog1;
 	private: System::ComponentModel::IContainer^  components;
 
 	protected:
@@ -115,6 +113,7 @@ namespace DB {
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
 			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->ôàéëToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->çáåðåãòèToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->äðóêóâàòèToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->âèõ³äToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->íàâ³ãàö³ÿToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -124,6 +123,7 @@ namespace DB {
 			this->îñòàííÿÊðà¿íàToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->ïðîÏðîãðàìóToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->ïðîÏðîãðàìóToolStripMenuItem1 = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->saveFileDialog1 = (gcnew System::Windows::Forms::SaveFileDialog());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictCountryFlag))->BeginInit();
 			this->menuStrip1->SuspendLayout();
 			this->SuspendLayout();
@@ -353,13 +353,20 @@ namespace DB {
 			// 
 			// ôàéëToolStripMenuItem
 			// 
-			this->ôàéëToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
-				this->äðóêóâàòèToolStripMenuItem,
-					this->âèõ³äToolStripMenuItem
+			this->ôàéëToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+				this->çáåðåãòèToolStripMenuItem,
+					this->äðóêóâàòèToolStripMenuItem, this->âèõ³äToolStripMenuItem
 			});
 			this->ôàéëToolStripMenuItem->Name = L"ôàéëToolStripMenuItem";
 			this->ôàéëToolStripMenuItem->Size = System::Drawing::Size(48, 20);
 			this->ôàéëToolStripMenuItem->Text = L"Ôàéë";
+			// 
+			// çáåðåãòèToolStripMenuItem
+			// 
+			this->çáåðåãòèToolStripMenuItem->Name = L"çáåðåãòèToolStripMenuItem";
+			this->çáåðåãòèToolStripMenuItem->Size = System::Drawing::Size(131, 22);
+			this->çáåðåãòèToolStripMenuItem->Text = L"Çáåðåãòè";
+			this->çáåðåãòèToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::çáåðåãòèToolStripMenuItem_Click);
 			// 
 			// äðóêóâàòèToolStripMenuItem
 			// 
@@ -426,6 +433,10 @@ namespace DB {
 			this->ïðîÏðîãðàìóToolStripMenuItem1->Text = L"Ïðî ïðîãðàìó";
 			this->ïðîÏðîãðàìóToolStripMenuItem1->Click += gcnew System::EventHandler(this, &MainForm::ïðîÏðîãðàìóToolStripMenuItem_Click);
 			// 
+			// saveFileDialog1
+			// 
+			this->saveFileDialog1->Filter = L"Txt files |*.txt";
+			// 
 			// MainForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -473,27 +484,34 @@ namespace DB {
 		int linesCount = 0;
 		int selCountry = 0;
 
+		private: OleDb::OleDbConnection^ CreateConnection()
+		{
+			//ñòâîðþºìî äàòàñåò, êîíåêøí, ³ êîìàíäó
+			oleConnection = gcnew OleDb::
+				OleDbConnection(
+					"Data Source=\"database.mdb\"; User ID=Admin;Provider=\"Microsoft.Jet.OLEDB.4.0\";");
+			dataSet = gcnew DataSet();
+			oleCommand = gcnew OleDb::OleDbCommand();
+			try
+			{
+				//ï³ä'ºäíóºìîñÿ
+				if (oleConnection->State == ConnectionState::Closed)
+					oleConnection->Open();
+			}
+			catch (Exception^ e)
+			{
+				MessageBox::Show("Ïðîáëåìà ç áàçîþ äàíèõ\n", e->Message);
+			}
+
+			return oleConnection;
+		}
 	private: System::
 		Void MainForm_Load(System::Object^ sender, System::EventArgs^ e)
 	{
 		//çàïóñê ôîðìè
 
-		//ñòâîðþºìî äàòàñåò, êîíåêøí, ³ êîìàíäó
-		oleConnection = gcnew OleDb::
-			OleDbConnection( 
-			"Data Source=\"database.mdb\"; User ID=Admin;Provider=\"Microsoft.Jet.OLEDB.4.0\";");
-		dataSet = gcnew DataSet();
-		oleCommand = gcnew OleDb::OleDbCommand();
-		try
-		{
-			//ï³ä'ºäíóºìîñÿ
-			if (oleConnection->State == ConnectionState::Closed)
-				oleConnection->Open();
-		}
-		catch (Exception^ e)
-		{
-			MessageBox::Show("Ïðîáëåìà ç áàçîþ äàíèõ\n", e->Message);
-		}
+		//ñòâîðþºìî çâ'ÿçîê
+		oleConnection = CreateConnection();
 
 		//îòðèìóºìî äàí³
 		oleDataAdapter = gcnew OleDb::OleDbDataAdapter("Select * From [table]", oleConnection);
@@ -525,16 +543,8 @@ private: System::Void lstBoxSelectCountry_SelectedIndexChanged(System::Object^  
 	{
 		//âèá³ð êðà¿íè â ë³ñòáîêñ
 
-		//ñòâîðþºìî äàòàñåò, êîíåêøí, ³ êîìàíäó
-		dataSet = gcnew DataSet();
-		oleConnection = gcnew OleDb::
-			OleDbConnection(
-				"Data Source=\"database.mdb\"; User ID=Admin;Provider=\"Microsoft.Jet.OLEDB.4.0\";");
-		oleCommand = gcnew OleDb::OleDbCommand();
-
-		//ï³ä'ºäíóºìîñÿ
-		if (oleConnection->State == ConnectionState::Closed)
-			oleConnection->Open();
+		//ñòâîðþºìî çâ'ÿçîê
+		oleConnection = CreateConnection();
 
 		//îòðèìóºìî ³íäåêñ âèáðàíîãî åëåìåíòó
 		selCountry = lstBoxSelectCountry->SelectedIndex;
@@ -617,16 +627,8 @@ private: System::Void btnLast_Click(System::Object^  sender, System::EventArgs^ 
 private: System::Void txtBoxSearchCountry_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 	//ââåäåííÿ òåêñòó â ïîøóêîâèé òåêñòáîêñ
 
-	//ñòâîðþºìî äàòàñåò, êîíåêøí, ³ êîìàíäó
-	dataSet = gcnew DataSet();
-	oleConnection = gcnew OleDb::
-		OleDbConnection(
-			"Data Source=\"database.mdb\"; User ID=Admin;Provider=\"Microsoft.Jet.OLEDB.4.0\";");
-	oleCommand = gcnew OleDb::OleDbCommand();
-
-	//ï³ä'ºäíóºìîñÿ
-	if (oleConnection->State == ConnectionState::Closed)
-		oleConnection->Open();
+	//ñòâîðþºìî çâ'ÿçîê
+	oleConnection = CreateConnection();
 
 	lstBoxSelectCountry->Items->Clear();
 	
@@ -692,11 +694,43 @@ private: System::Void printDocument1_PrintPage(System::Object^  sender, System::
 private: System::Void ïðîÏðîãðàìóToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 	showAbout();
 }
+
 private: void showAbout()
 {
 	//çàïóñê ôîðìè
 	AboutForm^ frm = gcnew AboutForm;
 	frm->Show(this);
+}
+
+private: System::Void çáåðåãòèToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	saveToFile();
+}
+
+private: void saveToFile()
+{
+	//çàïèñóºìî â ôàéë
+	String^ main = txtBoxMainInfo->Text;
+	String^ full = txtBoxFullInfo->Text;
+	String^ name = lblCountryName->Text;
+	String^ pict = pictCountryFlag->ImageLocation;
+
+	//îá'ºäíóºìî ñòðîêè
+	String^ strFile = "\n \tÂèõ³äíèé ôàéë ïðîãðàìè 'Ãåîãðàô³÷íèé äîâ³äíèê' \n\n" + "Êðà¿íà: " + name
+		+ "\n\nÐîçòàøóâàííÿ çîáðàæåííÿ ïðàïîðó: " + pict
+		+ "\nÇàãàëüíà ³íôîðìàö³ÿ:\n" + main
+		+ "\nÏîâíà ³íôîðìàö³ÿ:\n" + full;
+
+	//â³äêðèâàºìî ä³àëîã
+	saveFileDialog1->ShowDialog();
+	saveFileDialog1->DefaultExt = "*.cpp";
+	saveFileDialog1->Filter = "Cpp files |*.cpp";
+	String^ filename = saveFileDialog1->FileName;
+	System::IO::StreamWriter^ file = gcnew System::IO::StreamWriter(filename);
+
+	//çàïèñóºìî
+		file->WriteLine(strFile);
+	//çàêðèâàºìî ïîò³ê
+	file->Close();
 }
 };
 }

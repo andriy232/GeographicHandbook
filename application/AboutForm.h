@@ -100,11 +100,14 @@ namespace DB {
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedToolWindow;
 			this->Name = L"AboutForm";
 			this->Text = L"Про програму";
+			this->Load += gcnew System::EventHandler(this, &AboutForm::AboutForm_Load);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
 		}
 #pragma endregion
+	private: System::Void AboutForm_Load(System::Object^  sender, System::EventArgs^  e) {
+	}
 	};
 }
